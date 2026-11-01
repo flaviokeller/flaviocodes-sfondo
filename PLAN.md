@@ -58,7 +58,11 @@ Native pixel sizes; double-check any you are unsure about before shipping:
   all-devices grid (click a thumbnail to open it). State is in the URL. Previews render at
   display size; download and `?bare` render full size (`body[data-ready]` marks done).
   The overlay already shows one composition issue: grainy/amber-glow's mobile glow sits behind the clock.
-- [ ] 5. Batch export
+- [x] 5. Batch export (`npm run export`, flags `--styles --palettes --devices --out --jobs`).
+  Full default set (42 images, 5K desktop + 1290x2796 mobile) renders in ~10s on an M1 Pro.
+  Spot-check at full size: flat styles match Python within 1/255 (no seams); smooth styles'
+  identical-pixel runs are <=12px at p99, and the longer ones are genuinely flat colour (bg /
+  ramp end stop), not steps. Out-of-range sizes fail loudly (max 16384) instead of clamping.
 - [ ] 6. Decide the future of Python
 
 ## Phases

@@ -31,6 +31,7 @@ orientation only; re-render to refresh).
 ```bash
 cd web && npm install && npx playwright install chromium
 npm run dev            # preview UI; ?bare&style=&palette=&w=&h= renders full size, sets body[data-ready]
+npm run export         # all styles x palettes -> out-web/ (see scripts/export.ts for flags)
 npm run typecheck
 npm run check:ramp     # JS OKLab ramp vs Python (needs ../.venv)
 ```

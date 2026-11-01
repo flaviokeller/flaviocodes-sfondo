@@ -37,8 +37,10 @@ const options = (sel: HTMLSelectElement, items: [string, string][], value?: stri
 
 function size(): [number, number] {
   if (deviceSel.value === 'custom') {
-    const clamp = (v: number) => Math.min(16384, Math.max(16, Math.round(v) || 16));
-    return [clamp(Number(cw.value)), clamp(Number(ch.value))];
+    const [w, h] = [Number(cw.value), Number(ch.value)];
+    const ok = (v: number) => Number.isInteger(v) && v >= 16 && v <= 16384;
+    if (!ok(w) || !ok(h)) throw new Error(`custom size must be whole numbers from 16 to 16384 (got ${cw.value}×${ch.value})`);
+    return [w, h];
   }
   const d = DEVICES.find((d) => d.id === deviceSel.value) ?? DEVICES[0];
   return [d.w, d.h];
@@ -146,10 +148,10 @@ async function draw() {
 }
 
 async function download() {
-  const [w, h] = size();
   downloadBtn.disabled = true;
-  downloadBtn.textContent = `Rendering ${w}×${h}…`;
   try {
+    const [w, h] = size();
+    downloadBtn.textContent = `Rendering ${w}×${h}…`;
     const canvas = await renderCanvas(STYLES[styleSel.value], palette(), w, h);
     const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, 'image/png'));
     if (!blob) throw new Error('PNG encoding failed');
