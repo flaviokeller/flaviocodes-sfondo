@@ -1,8 +1,8 @@
-# wallpapers
+# sfondo
 
-Procedural wallpaper generator: 7 styles x 3 palettes x desktop + mobile = 42 images.
-Pure Python (NumPy, SciPy, Pillow), no design tools needed. Every image is
-deterministic, so re-running gives identical results.
+Procedural wallpapers, rendered in the browser at any device size: 7 styles × 3 palettes,
+for phones and desktops. Every image is deterministic, so the same style, palette and size
+always give the same pixels. Flat styles are SVG; smooth styles are WebGL2 shaders.
 
 Styles are loosely inspired by wallpaper packs on platsupply.com (not copies):
 
@@ -12,57 +12,65 @@ Styles are loosely inspired by wallpaper packs on platsupply.com (not copies):
 | `gradient_blur` | big colour blooms dissolving into deep black |
 | `grainy` | dark scene with a glowing arc or glow and heavy film grain |
 | `levels` | flat horizontal colour bands stepping through a ramp |
-| `palette` | overlapping rounded pills (rotated to horizontal on mobile) |
+| `palette` | overlapping rounded pills (horizontal on mobile) |
 | `influx` | silky, lit wave surfaces |
 | `retro_lines` | diagonal band of flat stripes between two solid fields |
+
+Contact sheets for all of them are in [`previews/`](previews).
 
 ## Setup
 
 ```bash
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+npm install
+npx playwright install chromium   # only needed for export / previews
 ```
 
 ## Use
 
 ```bash
-python -m wallpapers list                          # styles + palettes
-python -m wallpapers render                        # everything -> out/
-python -m wallpapers render -s blur -p aurora      # one palette
-python -m wallpapers render -s grainy -d mobile    # one device
-python -m wallpapers render --scale 0.2 --sheets   # quick preview + contact sheets
-python -m wallpapers render -f jpg                 # JPEG instead of PNG (much smaller)
+npm run dev        # preview: style, palette, device, seed, iOS lock-screen overlay, PNG download
+npm run export     # every style x palette -> out-web/<style>/<palette>-<device>.png
+npm run export -- --styles blur,influx --palettes aurora --devices desktop,iphone-air,3440x1440
+npm run previews   # refresh previews/*.jpg
+npm run build      # static site in dist/
 ```
 
-Output: `out/<style>/<palette>-desktop.png` and `-mobile.png`;
-contact sheets (with `--sheets`) in `out/sheets/<style>.jpg`.
+Export devices: `desktop` (5120×2880), `mobile` (1290×2796), any preset id from
+`src/core/devices.ts`, or `WxH` (up to 16384 per side). The full default set takes about
+10 seconds on an M1 Pro.
 
-## Sizes
+## Palettes
 
-Set in `wallpapers/render.py`:
+All palettes live in [`src/palettes.json`](src/palettes.json), grouped by style. Add an
+entry and it shows up in the preview and export; no code change needed.
 
-- desktop 5120x2880 (16:9, 5K; downscales cleanly to 4K/1440p)
-- mobile 1290x2796 (19.5:9, iPhone Pro Max; fits all current iPhones, which crop/scale)
+Common keys:
 
-## Tweaking
+- `colors`: hex stops; what they mean depends on the style (below).
+- `bg`: background colour, where the style has one.
+- `seed`: changes the random layout, never the colours. Use Randomise in the preview to
+  find a good one.
 
-- **Colours / layout seeds:** `wallpapers/palettes.py` (documented at the top).
-  Add a palette entry and re-render; no code changes.
-- **Look of a style:** `wallpapers/styles/<style>.py`. Each exposes
-  `render(w, h, pal, mobile) -> uint8 HxWx3` and reads optional tuning keys
-  from the palette dict (e.g. `warp`, `freq`, `grain`, `gain`, `relief`).
-  Per-palette overrides go in `palettes.py`.
-- **New style:** add a module with `render`, register it in
-  `styles/__init__.py`, add palettes under the same key.
+Per style (all optional unless noted):
 
-## How it works (short)
+| style | `colors` | other keys |
+|---|---|---|
+| `blur` | ramp stops (2-8) | `warp` 0.2, `freq` 4.2, `angle` (random) |
+| `gradient_blur` | one blob each (up to 8) | `bg`, `warp` 0.22, `gain` 1.3, `angle` (random) |
+| `grainy` | ramp from rim to deep (`bg` is appended) | `mode` `arc` or `glow`, `grain` 0.05; arc: `top` 0.38, `top_m` 0.5, `depth` 0.3, `halo` 0.035; glow: `cx` 0.5, `cy` -0.02, `cy_m` (mobile, defaults to `cy`), `rx` 0.55, `ry` 0.62, `tilt` -0.25, `gamma` 0.9 |
+| `levels` | ramp anchors | `n` bands |
+| `palette` | ramp anchors | `bg` (required), `n` pills |
+| `influx` | ramp stops, dark to light | `warp` 0.22, `relief` 0.22, `spec` 0.22, `shade_shift` 0.35 |
+| `retro_lines` | first = top-left field, last = bottom-right field, rest = stripes | `angle` 30, `angle_m` 62, `stripe` 0.03, `offset` 0.1 |
 
-Smooth styles are computed on a small grid (fast), upscaled bicubically, then
-finished at full resolution with grain and/or 1-LSB dither to avoid banding.
-Colour ramps interpolate in OKLab so mid-tones stay clean. Flat styles are
-drawn directly at full resolution with 1px anti-aliased edges.
+Smooth styles also accept `grain` (amplitude of film grain; 0 by default except `grainy`).
 
-## Web port
+## How it works
 
-A browser version (SVG + WebGL, live preview, per-device sizes) is planned: see `PLAN.md`.
-Project conventions for Claude Code are in `CLAUDE.md`.
+- Coordinates are in units of `sqrt(w*h)`, so a composition keeps its density on every
+  aspect ratio, and a small preview looks like the full-size export.
+- Colour ramps interpolate in OKLab, so mid-tones stay clean.
+- Shaders end with a 1-LSB dither, so dark gradients don't band at 5K.
+
+More detail, including the measured checks behind these choices, is in
+[`docs/architecture.md`](docs/architecture.md).

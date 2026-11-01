@@ -86,6 +86,7 @@
       ],
       "bg": "#030610",
       "cx": 0.45,
+      "cy_m": 0.42,
       "seed": 2
     },
     "emerald-arc": {
@@ -175,7 +176,7 @@
         "#ff8a65",
         "#ffd6a5"
       ],
-      "seed": 4
+      "seed": 6
     },
     "glacier": {
       "colors": [

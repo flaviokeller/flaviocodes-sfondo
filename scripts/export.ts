@@ -8,18 +8,16 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import { chromium } from 'playwright';
-import { createServer } from 'vite';
 import { DEVICES } from '../src/core/devices.ts';
 import { PALETTES } from '../src/core/palettes.ts';
+import { startBrowser } from './browser.ts';
 
-const root = fileURLToPath(new URL('..', import.meta.url));
 const { values: args } = parseArgs({
   options: {
     styles: { type: 'string' },
     palettes: { type: 'string' },
     devices: { type: 'string', default: 'desktop,mobile' },
-    out: { type: 'string', default: fileURLToPath(new URL('../../out-web', import.meta.url)) },
+    out: { type: 'string', default: fileURLToPath(new URL('../out-web', import.meta.url)) },
     jobs: { type: 'string', default: '3' },
   },
 });
@@ -44,10 +42,7 @@ const jobs = styles.flatMap((style) =>
 );
 if (!jobs.length) throw new Error('nothing to export (check --styles / --palettes)');
 
-const server = await createServer({ root, logLevel: 'error', server: { port: 0 } });
-await server.listen();
-const base = server.resolvedUrls!.local[0];
-const browser = await chromium.launch({ args: ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist'] });
+const { base, browser, close } = await startBrowser();
 
 const t0 = Date.now();
 let done = 0, failed = 0;
@@ -82,7 +77,6 @@ await Promise.all(
     while (queue.length) await run(queue.shift()!);
   }),
 );
-await browser.close();
-await server.close();
+await close();
 console.log(`${done} written, ${failed} failed in ${((Date.now() - t0) / 1000).toFixed(1)}s -> ${args.out}`);
 if (failed) process.exit(1);

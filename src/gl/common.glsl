@@ -1,5 +1,5 @@
 // Shared GLSL for the smooth styles. A style supplies `vec3 scene(vec2 p)` returning
-// sRGB in 0..1, with p in units of sqrt(w*h), origin top-left, y down (same as Python).
+// sRGB in 0..1, with p in units of sqrt(w*h), origin top-left, y down.
 // main() then adds film grain (sized in output pixels) and a 1-LSB dither.
 
 uniform vec2 uSize;        // output size in pixels
@@ -26,10 +26,9 @@ float gauss(ivec2 c, uint salt) {
 }
 
 // ---- smooth value noise; `salt` picks an independent field ----
-// Catmull-Rom (cubic) interpolation of a gaussian lattice, close to the cubic spline in
-// wallpapers.core.noise. Quintic value noise is cheaper but creases at lattice points,
-// which shows as kinks on smooth edges. Std and slope match Python (measured over 40 seeds),
-// so Python's warp amplitudes carry over unchanged.
+// Catmull-Rom (cubic) interpolation of a gaussian lattice; std ~0.7. Quintic value noise is
+// cheaper but creases at lattice points, which shows as kinks on smooth edges. The styles'
+// warp amplitudes are tuned for this noise's spread, so changing it changes every style.
 vec4 catmullRom(float t) {
   float t2 = t * t, t3 = t2 * t;
   return 0.5 * vec4(-t3 + 2.0 * t2 - t, 3.0 * t3 - 5.0 * t2 + 2.0, -3.0 * t3 + 4.0 * t2 + t, t3 - t2);

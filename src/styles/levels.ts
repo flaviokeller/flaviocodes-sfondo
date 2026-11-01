@@ -6,7 +6,7 @@ import { svgDoc } from './svg.ts';
 export function render(w: number, h: number, pal: Palette): string {
   const n = pal.n ?? pal.colors.length;
   const bands = rampHex(n, pal.colors);
-  // Band i starts on the first pixel row with floor(row * n / h) == i, like the Python version.
+  // Band i starts on the first pixel row with floor(row * n / h) == i.
   // Each rect runs to the bottom and later ones paint over it, so there are no seams.
   const rects = bands.map((c, i) => {
     const y = Math.ceil((i * h) / n);

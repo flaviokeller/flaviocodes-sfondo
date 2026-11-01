@@ -25,7 +25,7 @@ export const grainy = {
       uArcShape: [num(pal, 'depth', 0.3) * (mobile ? 1.4 : 1), num(pal, 'halo', 0.035)],
       uGlow: [
         xm * num(pal, 'cx', 0.5),
-        ym * num(pal, 'cy', -0.02),
+        ym * (mobile ? num(pal, 'cy_m', num(pal, 'cy', -0.02)) : num(pal, 'cy', -0.02)),
         xm * num(pal, 'rx', 0.55) * (mobile ? 1.1 : 1),
         ym * num(pal, 'ry', 0.62) * (mobile ? 0.55 : 1),
       ],

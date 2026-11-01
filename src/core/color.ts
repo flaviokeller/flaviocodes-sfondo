@@ -1,4 +1,4 @@
-/** sRGB <-> OKLab and OKLab colour ramps (port of wallpapers/core.py). */
+/** sRGB <-> OKLab and OKLab colour ramps. */
 
 export type RGB = [number, number, number]; // sRGB, 0..1
 export type Lab = [number, number, number];

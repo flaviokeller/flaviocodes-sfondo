@@ -12,7 +12,7 @@ vec3 scene(vec2 p) {
     float s = uArc.z - (length(p - uArc.xy) + 0.012 * fbm(p, 2.5, 2, 1u)); // > 0 inside the arc
     vec3 inside = ramp(pow(clamp(s / uArcShape.x, 0.0, 1.0), 0.85));
     vec3 outside = mix(uBg, uHot, exp(min(s, 0.0) / uArcShape.y) * 0.9);
-    // Python softens this edge with a post blur; a narrow blend does the same here
+    // inside and outside don't meet exactly at s = 0; a narrow blend hides the seam
     return mix(outside, inside, smoothstep(-0.002, 0.002, s));
   }
   vec2 w = p + 0.05 * vec2(fbm(p, 1.5, 2, 11u), fbm(p, 1.5, 2, 23u));

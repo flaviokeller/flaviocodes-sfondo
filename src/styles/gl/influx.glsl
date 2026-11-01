@@ -1,8 +1,7 @@
 // Influx: silky lit wave surfaces. Height field = 3 warped sine swells, lit with
 // Lambert + Blinn specular from the top left; colour from the ramp along the height.
-// Unlike the Python version, shading moves the colour along the ramp (shadows take the
-// darker stops' hue) and scales OKLab lightness, instead of multiplying sRGB. That
-// multiply turned cream/orange into brown mud.
+// Shading moves the colour along the ramp (shadows take the darker stops' hue) and scales
+// OKLab lightness. Multiplying sRGB instead turns cream/orange into brown mud.
 uniform vec4 uSwell[3];       // dir x, dir y, wavenumber, amplitude
 uniform float uSwellPhase[3];
 uniform float uWarp, uRelief, uSpec, uShadeShift;
