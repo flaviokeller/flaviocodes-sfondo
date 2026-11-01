@@ -58,6 +58,7 @@ function syncControls() {
   $<HTMLButtonElement>('randomise').disabled = !gl;
   seedIn.placeholder = gl ? String(PALETTES[styleSel.value][paletteSel.value].seed ?? 0) : 'n/a';
   custom.hidden = deviceSel.value !== 'custom';
+  deviceSel.title = deviceSel.selectedOptions[0]?.title ?? '';
   viewButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === view)));
 }
 
@@ -177,9 +178,11 @@ const fillPalettes = (value?: string | null) =>
 fillPalettes(params.get('palette'));
 options(
   deviceSel,
-  [...DEVICES.map((d): [string, string] => [d.id, `${d.name} (${d.w}×${d.h})`]), ['custom', 'Custom…']],
+  [...DEVICES.map((d): [string, string] => [d.id, `${d.short ?? d.name} (${d.w}×${d.h})`]), ['custom', 'Custom…']],
   params.get('device') ?? (params.has('w') ? 'custom' : '5k'),
 );
+// Short labels drop older models; the full list shows on hover.
+DEVICES.forEach((d, i) => (deviceSel.options[i].title = d.name));
 cw.value = params.get('w') ?? '2560';
 ch.value = params.get('h') ?? '1440';
 seedIn.value = params.get('seed') ?? '';
