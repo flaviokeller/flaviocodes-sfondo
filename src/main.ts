@@ -53,10 +53,12 @@ function palette(): Palette {
 }
 
 function syncControls() {
-  const gl = STYLES[styleSel.value].kind === 'gl';
-  seedIn.disabled = !gl;
-  $<HTMLButtonElement>('randomise').disabled = !gl;
-  seedIn.placeholder = gl ? String(PALETTES[styleSel.value][paletteSel.value].seed ?? 0) : 'n/a';
+  // GL styles always take a seed; SVG styles only when their palettes define one
+  const pal = PALETTES[styleSel.value][paletteSel.value];
+  const seeded = STYLES[styleSel.value].kind === 'gl' || pal.seed !== undefined;
+  seedIn.disabled = !seeded;
+  $<HTMLButtonElement>('randomise').disabled = !seeded;
+  seedIn.placeholder = seeded ? String(pal.seed ?? 0) : 'n/a';
   custom.hidden = deviceSel.value !== 'custom';
   viewButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === view)));
 }

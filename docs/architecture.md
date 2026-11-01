@@ -16,8 +16,8 @@ before the move to the repo root if you ever need it as a reference).
 | Topic | Decision |
 |---|---|
 | Tooling | Vite + TypeScript, no UI framework. Plain DOM for the preview page. |
-| Flat styles (`levels`, `palette`, `retro_lines`) | Pure functions returning an SVG string. Overlapping shapes painted in order, so there are no seams. |
-| Smooth styles (`blur`, `gradient_blur`, `grainy`, `influx`) | WebGL2 fragment shaders on one full-screen triangle (`src/gl/`). CSS/SVG cannot do swirling bands or lit silk cleanly, and shaders give the same result in every browser. |
+| Flat styles (`levels`, `palette`, `retro_lines`, `dunes`, `halftone`, `truchet`) | Pure functions returning an SVG string. Overlapping shapes painted in order, so there are no seams. |
+| Smooth styles (`blur`, `gradient_blur`, `grainy`, `influx`, `contours`, `glass`) | WebGL2 fragment shaders on one full-screen triangle (`src/gl/`). CSS/SVG cannot do swirling bands or lit silk cleanly, and shaders give the same result in every browser. |
 | Shared shader code | `src/gl/common.glsl`: integer hash, Catmull-Rom value noise + fbm, OKLab ramp (stops converted to OKLab on the CPU), grain sized in output pixels, 1-LSB dither. A style only writes `vec3 scene(vec2 p)`. |
 | Randomness | Seeded PRNG on the CPU (mulberry32, `src/core/prng.ts`) for layout parameters passed as uniforms; seeded integer hashes on the GPU for noise. |
 | Rendering | `src/render.ts` turns any style into a 2D canvas: SVG is rasterised, GL is copied off one shared WebGL canvas (browsers cap live contexts). Preview, grid, download and export all use it. |
