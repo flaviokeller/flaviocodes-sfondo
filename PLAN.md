@@ -46,7 +46,7 @@ Native pixel sizes; double-check any you are unsure about before shipping:
 
 - [x] 0. Scaffold (`npm run check:ramp`: JS ramp matches Python within 0.001/255)
 - [x] 1. SVG styles (`levels` pixel-exact vs Python; `palette`, `retro_lines` differ only on AA edges)
-- [ ] 2. WebGL harness
+- [x] 2. WebGL harness (`web/test/ramp.html`: dark ramp at 5120x2880 renders in ~1s on an M1 Pro; column means within 0.04 LSB of the exact ramp, no steps. Noise/fbm/grain are written but only get checked in phase 3)
 - [ ] 3. Shader styles
 - [ ] 4. Preview UI (a minimal one exists: style/palette/device selects; `?bare&w=&h=` renders at exact size)
 - [ ] 5. Batch export
