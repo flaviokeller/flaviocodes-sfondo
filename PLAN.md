@@ -53,7 +53,11 @@ Native pixel sizes; double-check any you are unsure about before shipping:
   `influx` shading now shifts along the ramp + scales OKLab lightness instead of multiplying
   sRGB (removes the brown mud; new palette key `shade_shift`, default 0.35). Some seeds give
   big flat areas (e.g. influx/sunrise desktop); tune seeds per palette if it bothers.
-- [ ] 4. Preview UI (a minimal one exists: style/palette/device selects; `?bare&w=&h=` renders at exact size)
+- [x] 4. Preview UI. Style/palette/device/custom size, seed + randomise (GL styles only),
+  PNG download at full size, iOS lock-screen overlay (approximate, in points at @3x),
+  all-devices grid (click a thumbnail to open it). State is in the URL. Previews render at
+  display size; download and `?bare` render full size (`body[data-ready]` marks done).
+  The overlay already shows one composition issue: grainy/amber-glow's mobile glow sits behind the clock.
 - [ ] 5. Batch export
 - [ ] 6. Decide the future of Python
 
