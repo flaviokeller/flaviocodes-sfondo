@@ -1,58 +1,51 @@
 # CLAUDE.md
 
-Procedural wallpaper generator. Seven styles (blur, gradient_blur, grainy, levels,
-palette, influx, retro_lines), each with 3 palettes, rendered for desktop and mobile.
-The styles are loosely inspired by wallpaper packs on platsupply.com; they are
-original compositions, not copies. Do not try to reproduce any specific
-pack pixel for pixel.
+Procedural wallpaper generator in the browser. Seven styles (blur, gradient_blur, grainy,
+levels, palette, influx, retro_lines), each with 3 palettes, rendered at any device size.
+Flat styles are SVG, smooth styles are WebGL2 shaders. The styles are original
+compositions; do not reproduce any existing wallpaper pack.
 
-Two implementations are planned:
+Design decisions, measured facts and pitfalls: `docs/architecture.md`.
 
-1. **Python (done, `wallpapers/`)**: NumPy/SciPy/Pillow, pixel-exact PNG output. Treat it
-   as the reference and batch renderer.
-2. **Web (to build, `web/`)**: SVG, CSS, JS and WebGL, with a live preview and
-   per-device sizing. See `PLAN.md` for the full plan and port notes.
-
-## Commands (Python)
+## Commands
 
 ```bash
-python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
-python -m wallpapers list
-python -m wallpapers render --scale 0.2 --sheets    # fast preview + contact sheets in out/sheets
-python -m wallpapers render -s blur -p aurora -d mobile
-python scripts/export_palettes.py                    # palettes.py -> web/palettes.json
+npm install && npx playwright install chromium
+npm run dev            # preview UI; ?bare&style=&palette=&w=&h= renders full size, sets body[data-ready]
+npm run export         # all styles x palettes -> out-web/ (flags: see scripts/export.ts)
+npm run previews       # refresh the committed contact sheets in previews/
+npm run typecheck
+npm run build          # static site in dist/
 ```
 
-`out/` is git-ignored. `previews/` holds committed contact sheets (low-res, for
-orientation only; re-render to refresh).
+`/test/ramp.html` (dev server) renders a 5K dark ramp to check the shader dither.
 
 ## Layout
 
-- `wallpapers/core.py`: OKLab colour ramps, coordinate grid, noise/fbm, upscale, grain/dither.
-- `wallpapers/styles/*.py`: one `render(w, h, pal, mobile) -> uint8 HxWx3` per style.
-- `wallpapers/palettes.py`: all palettes (documented at the top). Single source of truth for now.
-- `wallpapers/render.py`: sizes, job planning, contact sheets.
-- `scripts/export_palettes.py`, `web/palettes.json`: palette export for the web port.
+- `src/palettes.json`: all palettes, the single source of truth (keys documented in README).
+- `src/core/`: OKLab colour + ramp, seeded PRNG, device presets, typed palettes.
+- `src/styles/`: flat styles (`*.ts` returning an SVG string) and `gl/` shader styles
+  (`*.glsl` + `*.ts` for uniforms), registered in `src/styles/index.ts`.
+- `src/gl/`: WebGL2 harness and `common.glsl` (noise, ramp, grain, dither).
+- `src/render.ts`: any style to a canvas. `src/main.ts`: preview UI. `src/ui/overlay.ts`: iOS lock screen.
+- `scripts/`: `export.ts`, `previews.ts`, shared `browser.ts` (Vite + headless Chromium).
 
 ## Conventions
 
-- Keep style functions pure and deterministic: same `(w, h, palette)` gives the same image.
+- Styles are pure and deterministic: same `(w, h, palette)` gives the same image.
   Per-palette `seed` changes layout, never colours.
 - Coordinates are in units of `sqrt(w*h)` so shape density looks the same on every aspect ratio.
 - Interpolate colour ramps in OKLab, not sRGB.
-- Smooth styles: compute on a small grid, upscale, then add grain/1-LSB dither at full
-  resolution (avoids 8-bit banding). Flat styles: draw at full resolution with 1px anti-aliasing,
-  no dither.
-- New palettes go in `palettes.py` only; no code change should be needed.
-- Do not commit rendered images (`out/`).
-- When changing a style, re-render a preview and actually look at it; this is a visual
-  project and numbers do not tell you whether it looks right.
+- Smooth styles always end with grain/1-LSB dither (in `common.glsl`); flat styles have none.
+- New palettes go in `src/palettes.json` only; no code change should be needed.
+- Do not commit rendered images (`out-web/`); `previews/` is the exception (low-res sheets).
+- When changing a style, render it and actually look at it (desktop, and mobile with the
+  lock-screen overlay); this is a visual project and numbers do not tell you whether it looks right.
 
 ## Known weak spots
 
-- `influx` is the loosest match to its reference and can look muddy where dark shading
-  meets orange/cream stops. First candidate for improvement.
-- `blur` and `gradient_blur` are looser interpretations: fewer, wider bands and blobs than a
+- `blur` and `gradient_blur` are loose interpretations: fewer, wider bands and blobs than a
   hand-made design would have.
-- Mobile layouts are only checked as thumbnails; verify against iOS lock-screen overlays
-  (clock at top, Dynamic Island) before treating them as final.
+- Some seeds give large flat areas; try seeds in the preview (Randomise) and write the good
+  one into `src/palettes.json`.
+- The lock-screen overlay is approximate (points at @3x), not an Apple asset.
