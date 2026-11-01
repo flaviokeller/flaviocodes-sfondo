@@ -1,0 +1,9 @@
+# Static build of the preview app. Deploy previews on PRs make visual changes easy to review.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "24"
+  # the build never launches a browser; skip Playwright's browser download if it is ever triggered
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1"

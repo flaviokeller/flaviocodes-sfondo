@@ -4,7 +4,7 @@ Procedural wallpapers, rendered in the browser at any device size: 7 styles × 3
 for phones and desktops. Every image is deterministic, so the same style, palette and size
 always give the same pixels. Flat styles are SVG; smooth styles are WebGL2 shaders.
 
-Styles are loosely inspired by wallpaper packs on platsupply.com (not copies):
+Styles:
 
 | style | look |
 |---|---|
@@ -74,3 +74,11 @@ Smooth styles also accept `grain` (amplitude of film grain; 0 by default except 
 
 More detail, including the measured checks behind these choices, is in
 [`docs/architecture.md`](docs/architecture.md).
+
+## Deploy
+
+`netlify.toml` builds the static preview (`npm run build` → `dist/`); PRs get deploy previews.
+
+## License
+
+[MIT](LICENSE)

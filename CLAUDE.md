@@ -2,9 +2,8 @@
 
 Procedural wallpaper generator in the browser. Seven styles (blur, gradient_blur, grainy,
 levels, palette, influx, retro_lines), each with 3 palettes, rendered at any device size.
-Flat styles are SVG, smooth styles are WebGL2 shaders. The styles are loosely inspired by
-wallpaper packs on platsupply.com; they are original compositions, not copies. Do not try
-to reproduce any specific pack pixel for pixel.
+Flat styles are SVG, smooth styles are WebGL2 shaders. The styles are original
+compositions; do not reproduce any existing wallpaper pack.
 
 Design decisions, measured facts and pitfalls: `docs/architecture.md`.
 
