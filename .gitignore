@@ -1,0 +1,7 @@
+out/
+.venv/
+__pycache__/
+*.pyc
+out-web/
+node_modules/
+web/dist/

@@ -1,0 +1,57 @@
+"""All palettes live here. Edit freely, or add new entries and re-render.
+
+Every palette is a dict handed to its style's ``render``. Common keys:
+  colors  list of hex stops (meaning depends on the style, see each style file)
+  bg      background hex (where the style has one)
+  seed    changes the random layout without changing colours
+Each style also reads a few optional tuning keys (warp, grain, freq, ...);
+see the docstrings / code in ``wallpapers/styles/``.
+"""
+
+PALETTES = {
+    # swirling soft bands; colors = ramp stops
+    "blur": {
+        "aurora": {"colors": ["#ff2d95", "#7a1fa2", "#2b3bff", "#17c3ff", "#ffb347"], "seed": 3},
+        "lagoon": {"colors": ["#0d1b4c", "#2f6bd8", "#2ecfc4", "#c8f1e4", "#7f5bd6"], "seed": 11},
+        "ember": {"colors": ["#2a0845", "#c1185b", "#ff5e3a", "#ffc15e", "#7b2ff7"], "seed": 21},
+    },
+    # colour blooms on black; colors = one blob each
+    "gradient_blur": {
+        "ember": {"colors": ["#ffb000", "#ff4a1c", "#8cc63f", "#c0182f", "#2a1fb0"], "bg": "#020103", "seed": 5},
+        "nebula": {"colors": ["#7c3aed", "#ec4899", "#22d3ee", "#3b82f6"], "bg": "#02020a", "seed": 8},
+        "forest": {"colors": ["#34d399", "#fde047", "#0ea5a4", "#1e3a8a"], "bg": "#010503", "seed": 13},
+    },
+    # dark scene + glow + grain; arc: colors = [rim, rim2, mid, deep]; glow: [centre ... edge]
+    "grainy": {
+        "violet-arc": {"mode": "arc", "colors": ["#f4c8ff", "#b45cff", "#4a1fb8", "#12082e"], "bg": "#05030f", "seed": 1},
+        "amber-glow": {"mode": "glow", "colors": ["#ffb347", "#d9731f", "#1b6f7a", "#0d2630"], "bg": "#030610", "cx": 0.45, "seed": 2},
+        "emerald-arc": {"mode": "arc", "colors": ["#c9ffd9", "#2ee59d", "#0e7f6a", "#06231b"], "bg": "#020a07", "seed": 3},
+    },
+    # horizontal flat bands; colors = ramp anchors, n = number of bands
+    "levels": {
+        "dusk": {"colors": ["#f78fb3", "#7b3f8c", "#2d1b4e"], "n": 9},
+        "ocean": {"colors": ["#e6f2ff", "#2f7fe0", "#06123a"], "n": 10},
+        "sunset-teal": {
+            "colors": ["#8c1c1c", "#d94a3b", "#f08a4b", "#f6b26b", "#f2e1a5", "#2a8f84", "#0f5c5a", "#0a3b3b", "#06201f"],
+            "n": 9,
+        },
+    },
+    # overlapping pills; colors = ramp anchors, n = number of pills
+    "palette": {
+        "citrus": {"bg": "#f0e2c0", "colors": ["#f6c343", "#ec8031", "#c2321e", "#5c1219", "#33101a"], "n": 11},
+        "ice": {"bg": "#eef9fb", "colors": ["#d3eef7", "#5bb7dd", "#1f5fa8", "#06124d"], "n": 11},
+        "midnight-pink": {"bg": "#030a22", "colors": ["#e23d86", "#8a2bbd", "#4b2cc9", "#5a8dee", "#74c7ec"], "n": 10},
+    },
+    # silky waves; colors = ramp stops (dark -> light)
+    "influx": {
+        "sunrise": {"colors": ["#0b1033", "#3b3fd1", "#c95bd9", "#ff8a65", "#ffd6a5"], "seed": 4},
+        "glacier": {"colors": ["#06121f", "#14527a", "#3fb0d6", "#bfe9f5", "#9a7bd9"], "seed": 9},
+        "dusk-silk": {"colors": ["#12041f", "#5a1b8f", "#e0457b", "#ff9d5c", "#f6e3c8"], "seed": 14},
+    },
+    # diagonal band; colors[0] = top-left field, last = bottom-right field, rest = stripes
+    "retro_lines": {
+        "cassette": {"colors": ["#0a323d", "#0f6a73", "#3f9c96", "#ecd9a0", "#f5a05a", "#ee7a42", "#c8343c"]},
+        "mono-ice": {"colors": ["#10131a", "#2b313c", "#4a5260", "#6c7585", "#98a1b0", "#c9d0da", "#f4f6fa"]},
+        "violet-pop": {"colors": ["#0d0a4a", "#2d1a9a", "#6a2fc4", "#c04fe0", "#f08cf0", "#f9c8fb", "#fbe9ff"]},
+    },
+}
