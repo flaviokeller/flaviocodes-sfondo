@@ -26,6 +26,15 @@ python scripts/export_palettes.py                    # palettes.py -> web/palett
 `out/` is git-ignored. `previews/` holds committed contact sheets (low-res, for
 orientation only; re-render to refresh).
 
+## Commands (web)
+
+```bash
+cd web && npm install && npx playwright install chromium
+npm run dev            # preview; ?style=&palette=&device= or ?bare&w=&h= for exact-size output
+npm run typecheck
+npm run check:ramp     # JS OKLab ramp vs Python (needs ../.venv)
+```
+
 ## Layout
 
 - `wallpapers/core.py`: OKLab colour ramps, coordinate grid, noise/fbm, upscale, grain/dither.

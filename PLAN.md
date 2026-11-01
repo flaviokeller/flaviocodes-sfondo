@@ -42,6 +42,16 @@ Native pixel sizes; double-check any you are unsure about before shipping:
 
 `mobile` = height > width. Styles may adapt layout by aspect ratio rather than device name.
 
+## Status
+
+- [x] 0. Scaffold (`npm run check:ramp`: JS ramp matches Python within 0.001/255)
+- [x] 1. SVG styles (`levels` pixel-exact vs Python; `palette`, `retro_lines` differ only on AA edges)
+- [ ] 2. WebGL harness
+- [ ] 3. Shader styles
+- [ ] 4. Preview UI (a minimal one exists: style/palette/device selects; `?bare&w=&h=` renders at exact size)
+- [ ] 5. Batch export
+- [ ] 6. Decide the future of Python
+
 ## Phases
 
 ### 0. Scaffold

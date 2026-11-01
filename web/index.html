@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sfondo</title>
+    <style>
+      body { margin: 0; font: 14px system-ui, sans-serif; background: #111; color: #ddd; }
+      body.bare { background: none; }
+      #controls { display: flex; gap: 8px; padding: 12px; align-items: center; }
+      #stage { display: grid; place-items: center; height: calc(100vh - 60px); }
+      #stage > svg { max-width: 95vw; max-height: calc(100vh - 80px); width: auto; height: auto; box-shadow: 0 4px 24px #000a; }
+      .bare #controls { display: none; }
+      .bare #stage { display: block; height: auto; }
+      .bare #stage > svg { max-width: none; max-height: none; box-shadow: none; display: block; }
+    </style>
+  </head>
+  <body>
+    <div id="controls">
+      <select id="style"></select>
+      <select id="palette"></select>
+      <select id="device"></select>
+    </div>
+    <div id="stage"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
