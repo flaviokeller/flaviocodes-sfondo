@@ -25,16 +25,27 @@ float gauss(ivec2 c, uint salt) {
   return sqrt(-2.0 * log(u1)) * cos(6.28318530718 * u2);
 }
 
-// ---- smooth value noise, roughly unit variance; `salt` picks an independent field ----
+// ---- smooth value noise; `salt` picks an independent field ----
+// Catmull-Rom (cubic) interpolation of a gaussian lattice, close to the cubic spline in
+// wallpapers.core.noise. Quintic value noise is cheaper but creases at lattice points,
+// which shows as kinks on smooth edges. Std and slope match Python (measured over 40 seeds),
+// so Python's warp amplitudes carry over unchanged.
+vec4 catmullRom(float t) {
+  float t2 = t * t, t3 = t2 * t;
+  return 0.5 * vec4(-t3 + 2.0 * t2 - t, 3.0 * t3 - 5.0 * t2 + 2.0, -3.0 * t3 + 4.0 * t2 + t, t3 - t2);
+}
 float noise(vec2 p, float freq, uint salt) {
   p *= freq;
-  vec2 i = floor(p), f = p - i;
-  vec2 u = f * f * f * (f * (f * 6.0 - 15.0) + 10.0); // quintic
-  ivec2 c = ivec2(i);
-  float a = gauss(c, salt), b = gauss(c + ivec2(1, 0), salt);
-  float d = gauss(c + ivec2(0, 1), salt), e = gauss(c + ivec2(1, 1), salt);
-  // bilinear blend of unit-variance values loses variance; 1.6 brings it back to ~1
-  return 1.6 * mix(mix(a, b, u.x), mix(d, e, u.x), u.y);
+  vec2 i = floor(p);
+  vec4 wx = catmullRom(p.x - i.x), wy = catmullRom(p.y - i.y);
+  ivec2 c = ivec2(i) - 1;
+  float tot = 0.0;
+  for (int y = 0; y < 4; y++) {
+    vec4 row = vec4(gauss(c + ivec2(0, y), salt), gauss(c + ivec2(1, y), salt),
+                    gauss(c + ivec2(2, y), salt), gauss(c + ivec2(3, y), salt));
+    tot += wy[y] * dot(wx, row);
+  }
+  return tot;
 }
 
 float fbm(vec2 p, float freq, int octaves, uint salt) {

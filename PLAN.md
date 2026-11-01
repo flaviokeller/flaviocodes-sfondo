@@ -47,7 +47,12 @@ Native pixel sizes; double-check any you are unsure about before shipping:
 - [x] 0. Scaffold (`npm run check:ramp`: JS ramp matches Python within 0.001/255)
 - [x] 1. SVG styles (`levels` pixel-exact vs Python; `palette`, `retro_lines` differ only on AA edges)
 - [x] 2. WebGL harness (`web/test/ramp.html`: dark ramp at 5120x2880 renders in ~1s on an M1 Pro; column means within 0.04 LSB of the exact ramp, no steps. Noise/fbm/grain are written but only get checked in phase 3)
-- [ ] 3. Shader styles
+- [x] 3. Shader styles. Checked side by side with Python (3 palettes x desktop/mobile) and at 5K 1:1.
+  Noise is Catmull-Rom over a gaussian lattice; its std/slope match `core.noise`, so Python's
+  warp amplitudes carry over (quintic value noise creased visibly at lattice points).
+  `influx` shading now shifts along the ramp + scales OKLab lightness instead of multiplying
+  sRGB (removes the brown mud; new palette key `shade_shift`, default 0.35). Some seeds give
+  big flat areas (e.g. influx/sunrise desktop); tune seeds per palette if it bothers.
 - [ ] 4. Preview UI (a minimal one exists: style/palette/device selects; `?bare&w=&h=` renders at exact size)
 - [ ] 5. Batch export
 - [ ] 6. Decide the future of Python

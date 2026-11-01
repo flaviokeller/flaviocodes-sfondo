@@ -60,7 +60,7 @@ npm run check:ramp     # JS OKLab ramp vs Python (needs ../.venv)
 ## Known weak spots
 
 - `influx` is the loosest match to its reference and can look muddy where dark shading
-  meets orange/cream stops. First candidate for improvement.
+  meets orange/cream stops. First candidate for improvement. (The web port's shading fixes the mud: `web/src/styles/gl/influx.glsl`.)
 - `blur` and `gradient_blur` are looser interpretations: fewer, wider bands and blobs than a
   hand-made design would have.
 - Mobile layouts are only checked as thumbnails; verify against iOS lock-screen overlays

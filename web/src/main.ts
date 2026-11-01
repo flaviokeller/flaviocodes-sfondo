@@ -3,6 +3,7 @@
  * size with no chrome, for screenshots/export).
  */
 import { DEVICES, isMobile } from './core/devices.ts';
+import { renderGl } from './gl/gl.ts';
 import { PALETTES } from './core/palettes.ts';
 import { STYLES } from './styles/index.ts';
 
@@ -12,6 +13,7 @@ const paletteSel = $<HTMLSelectElement>('palette');
 const deviceSel = $<HTMLSelectElement>('device');
 const stage = $<HTMLDivElement>('stage');
 const params = new URLSearchParams(location.search);
+const canvas = document.createElement('canvas');
 
 const options = (sel: HTMLSelectElement, items: [string, string][], value?: string | null) => {
   sel.replaceChildren(...items.map(([v, label]) => new Option(label, v)));
@@ -28,7 +30,15 @@ function size(): [number, number] {
 function draw() {
   const pal = PALETTES[styleSel.value][paletteSel.value];
   const [w, h] = size();
-  stage.innerHTML = STYLES[styleSel.value].render(w, h, pal, isMobile(w, h));
+  const style = STYLES[styleSel.value];
+  const mobile = isMobile(w, h);
+  if (style.kind === 'svg') {
+    stage.innerHTML = style.render(w, h, pal, mobile);
+  } else {
+    // one canvas (and WebGL context) for the page's lifetime
+    stage.replaceChildren(canvas);
+    renderGl(canvas, style.scene, w, h, style.uniforms(w, h, pal, mobile));
+  }
   const url = new URL(location.href);
   url.searchParams.set('style', styleSel.value);
   url.searchParams.set('palette', paletteSel.value);
