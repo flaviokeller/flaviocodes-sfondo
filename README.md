@@ -1,6 +1,6 @@
 # sfondo
 
-Procedural wallpapers, rendered in the browser at any device size: 7 styles × 3 palettes,
+Procedural wallpapers, rendered in the browser at any device size: 12 styles × 3 palettes,
 for phones and desktops. Every image is deterministic, so the same style, palette and size
 always give the same pixels. Flat styles are SVG; smooth styles are WebGL2 shaders.
 
@@ -15,6 +15,11 @@ Styles:
 | `palette` | overlapping rounded pills (horizontal on mobile) |
 | `influx` | silky, lit wave surfaces |
 | `retro_lines` | diagonal band of flat stripes between two solid fields |
+| `contours` | topographic map of a mountain range: isolines, every 5th one thicker |
+| `dunes` | stacked sand ridges with a light rim on each crest |
+| `halftone` | hexagonal dot grid printing one large soft blob |
+| `glass` | a sheet folded along a few long diagonal creases, lit, with grain |
+| `truchet` | quarter-circle tiles forming continuous meanders |
 
 Contact sheets for all of them are in [`previews/`](previews).
 
@@ -62,8 +67,13 @@ Per style (all optional unless noted):
 | `palette` | ramp anchors | `bg` (required), `n` pills |
 | `influx` | ramp stops, dark to light | `warp` 0.22, `relief` 0.22, `spec` 0.22, `shade_shift` 0.35 |
 | `retro_lines` | first = top-left field, last = bottom-right field, rest = stripes | `angle` 30, `angle_m` 62, `stripe` 0.03, `offset` 0.1 |
+| `contours` | line colours by height, low to high | `bg`, `peaks` 3 (max 3), `levels` 22, `line` 0.0004 (half-width) |
+| `dunes` | ramp anchors, back to front | `bg` (required, the sky), `n` 6 layers, `top` 0.32, `top_m` 0.42, `amp` 0.05, `rim` 0.004 |
+| `halftone` | dot colour from blob edge to centre | `bg` (required), `step` 0.022, `cx` 0.62, `cy` 0.55, `cy_m` 0.62, `radius` 0.45 |
+| `glass` | ramp stops, top-left to bottom-right | `folds` 4 (max 5), `relief` 0.9, `spec` 0.18, `shade_shift` 0.3 |
+| `truchet` | exactly 3: two region fills, then the line | `tile` 0.19, `tile_m` 0.15, `stroke` 0.18 (of a tile) |
 
-Smooth styles also accept `grain` (amplitude of film grain; 0 by default except `grainy`).
+Smooth styles also accept `grain` (amplitude of film grain; 0 by default except `grainy` and `glass`).
 
 ## How it works
 

@@ -233,5 +233,156 @@
         "#fbe9ff"
       ]
     }
+  },
+  "contours": {
+    "alpine": {
+      "colors": [
+        "#2b5f6b",
+        "#5fa39a",
+        "#d8c88f",
+        "#f4efe4"
+      ],
+      "bg": "#0a1216",
+      "seed": 2
+    },
+    "survey": {
+      "colors": [
+        "#a9bfa4",
+        "#6f9a7e",
+        "#8c6d4c",
+        "#4a3326"
+      ],
+      "bg": "#f2ede1",
+      "seed": 13
+    },
+    "ember": {
+      "colors": [
+        "#5b2a4a",
+        "#b8466a",
+        "#f08a5d",
+        "#ffd8a8"
+      ],
+      "bg": "#140b10",
+      "seed": 3
+    }
+  },
+  "dunes": {
+    "sahara-dusk": {
+      "colors": [
+        "#f0b48a",
+        "#d9805f",
+        "#a8524a",
+        "#5e2c3a",
+        "#2a1424"
+      ],
+      "bg": "#f8dcc0",
+      "seed": 3
+    },
+    "night": {
+      "colors": [
+        "#4a4f9e",
+        "#35357a",
+        "#26215c",
+        "#1a1442",
+        "#0e0b26"
+      ],
+      "bg": "#0b0d24",
+      "seed": 5
+    },
+    "rose": {
+      "colors": [
+        "#e8a0a8",
+        "#c7718a",
+        "#9a4f78",
+        "#6b3561",
+        "#3c1f45"
+      ],
+      "bg": "#3a2140",
+      "seed": 13
+    }
+  },
+  "halftone": {
+    "newsprint": {
+      "colors": [
+        "#1f1d1a",
+        "#1f1d1a"
+      ],
+      "bg": "#ede6d6"
+    },
+    "deep-sea": {
+      "colors": [
+        "#1d4e6e",
+        "#3f8fb0",
+        "#a9d6e5",
+        "#f1faee"
+      ],
+      "bg": "#0b1117"
+    },
+    "acid": {
+      "colors": [
+        "#2f4a12",
+        "#7fbf1f",
+        "#d9f99d"
+      ],
+      "bg": "#101110"
+    }
+  },
+  "glass": {
+    "ice": {
+      "colors": [
+        "#0b1026",
+        "#1d3b8f",
+        "#4f86f7",
+        "#a9d1ff",
+        "#f5f0ff"
+      ],
+      "seed": 2
+    },
+    "quartz": {
+      "colors": [
+        "#fde2e4",
+        "#f7c6d0",
+        "#e9a0bb",
+        "#c27bb0",
+        "#7a5ca3"
+      ],
+      "seed": 5
+    },
+    "amber": {
+      "colors": [
+        "#08070a",
+        "#2a1608",
+        "#8a4a12",
+        "#f0a43a",
+        "#ffe6b0"
+      ],
+      "seed": 13
+    }
+  },
+  "truchet": {
+    "navy-gold": {
+      "colors": [
+        "#14213d",
+        "#1d3461",
+        "#fca311"
+      ],
+      "seed": 9
+    },
+    "terracotta": {
+      "colors": [
+        "#f4ead8",
+        "#eadbbf",
+        "#c8553d"
+      ],
+      "seed": 2
+    },
+    "mint": {
+      "colors": [
+        "#0f2a24",
+        "#163a32",
+        "#7fd1b9"
+      ],
+      "seed": 5
+    }
   }
 }
