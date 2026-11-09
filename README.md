@@ -87,7 +87,12 @@ More detail, including the measured checks behind these choices, is in
 
 ## Deploy
 
-`netlify.toml` builds the static preview (`npm run build` → `dist/`); PRs get deploy previews.
+The static preview (`npm run build` → `dist/`) is served as Cloudflare Workers static assets,
+configured in `wrangler.jsonc`. Workers Builds connects the repo: build command `npm run build`,
+deploy command `npx wrangler deploy`; pull requests get preview URLs. `.nvmrc` pins Node.
+`npx wrangler dev` serves the built `dist/` locally the way Cloudflare will.
+
+`netlify.toml` stays until the Cloudflare deploy is confirmed, then goes in a follow-up.
 
 ## License
 
