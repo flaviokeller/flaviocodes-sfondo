@@ -1,0 +1,10 @@
+// Static build of the preview app, served as Cloudflare Workers static assets.
+// Workers Builds runs `npm run build` and then `npx wrangler deploy`; pull requests get preview URLs.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "flaviocodes-sfondo",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist"
+  }
+}
